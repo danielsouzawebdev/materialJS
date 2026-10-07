@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>JavaScript Intermediário — JavaScript na Prática</title>
+<meta name="description" content="JavaScript intermediário: DOM, eventos, métodos de array, objetos, formulários, JSON e localStorage.">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="bar">
+    <a class="brand" href="index.html"><span class="mark">J</span>JavaScript na Prática</a>
+    <nav class="site-nav">
+      <a href="index.html">Início</a>
+      <a href="basico.html">Básico</a>
+      <a href="intermediario.html" aria-current="page">Intermediário</a>
+      <a href="avancado.html">Avançado</a>
+    </nav>
+  </div>
+</header>
+<div class="level-nav">
+  <div class="bar">
+    <a class="level-pill" href="basico.html">1 · Básico</a>
+    <a class="level-pill" aria-current="page" href="intermediario.html">2 · Intermediário</a>
+    <a class="level-pill" href="avancado.html">3 · Avançado</a>
+  </div>
+</div>
+
+<div class="docs">
+  <aside class="docs-side">
+    <p class="side-title">Módulos</p>
+    <ul>
+      <li><a href="#m1">1. Selecionar elementos do DOM</a></li>
+      <li><a href="#m2">2. Manipular o DOM</a></li>
+      <li><a href="#m3">3. Eventos</a></li>
+      <li><a href="#m4">4. Métodos de array</a></li>
+      <li><a href="#m5">5. Objetos e desestruturação</a></li>
+      <li><a href="#m6">6. Formulários com JS</a></li>
+      <li><a href="#m7">7. JSON e localStorage</a></li>
+      <li><a href="#projeto">Projeto do nível</a></li>
+    </ul>
+  </aside>
+
+  <main class="docs-main">
+    <p class="page-kicker">nível 2 de 3</p>
+    <h1>JavaScript Intermediário</h1>
+    <p class="lede">Pré-requisito: <a href="basico.html">JavaScript Básico</a>. Aqui o código sai do console e passa a controlar uma página de verdade.</p>
+
+    <section id="m1">
+      <h2>1. Selecionar elementos do DOM</h2>
+      <pre><code>const titulo = document.querySelector("h1");
+const primeiroItem = document.querySelector(".item");
+const todosOsItens = document.querySelectorAll(".item");
+const porId = document.getElementById("menu");</code></pre>
+      <table>
+        <thead><tr><th>Método</th><th>Retorna</th></tr></thead>
+        <tbody>
+          <tr><td><code>querySelector(seletor)</code></td><td>o primeiro elemento que casa com o seletor CSS, ou <code>null</code></td></tr>
+          <tr><td><code>querySelectorAll(seletor)</code></td><td>uma lista (NodeList) com todos os elementos que casam</td></tr>
+          <tr><td><code>getElementById(id)</code></td><td>o elemento com aquele id, mais rápido mas menos flexível</td></tr>
+        </tbody>
+      </table>
+      <p class="note"><code>querySelector</code> aceita qualquer seletor CSS válido — <code>"#id"</code>, <code>".classe"</code>, <code>"ul li:first-child"</code> — exatamente a mesma sintaxe do material de CSS.</p>
+    </section>
+
+    <section id="m2">
+      <h2>2. Manipular o DOM</h2>
+      <pre><code>const titulo = document.querySelector("h1");
+
+titulo.textContent = "Novo título";      // só texto, seguro contra HTML malicioso
+titulo.innerHTML = "Novo &lt;em&gt;título&lt;/em&gt;"; // interpreta HTML — cuidado com dados de usuário
+
+titulo.style.color = "blue";
+titulo.style.fontSize = "2rem";
+
+titulo.classList.add("destaque");
+titulo.classList.remove("oculto");
+titulo.classList.toggle("ativo");         // adiciona se não tem, remove se já tem
+
+titulo.setAttribute("data-status", "ok");
+titulo.getAttribute("data-status");        // "ok"</code></pre>
+      <div class="callout warn">
+        <span class="label">innerHTML e segurança</span>
+        <p>Nunca jogue texto digitado por um usuário direto em <code>innerHTML</code> sem tratar — é a porta de entrada clássica para um ataque de injeção de código (XSS). Quando o conteúdo é só texto, prefira sempre <code>textContent</code>.</p>
+      </div>
+    </section>
+
+    <section id="m3">
+      <h2>3. Eventos</h2>
+      <pre><code>const botao = document.querySelector("#meu-botao");
+
+botao.addEventListener("click", () =&gt; {
+  console.log("Botão clicado!");
+});
+
+botao.addEventListener("click", function (evento) {
+  console.log(evento.target);       // o elemento que disparou o evento
+  evento.preventDefault();           // cancela o comportamento padrão (em links/forms)
+});
+
+document.addEventListener("keydown", (evento) =&gt; {
+  if (evento.key === "Enter") {
+    console.log("Enter pressionado");
+  }
+});</code></pre>
+      <table>
+        <thead><tr><th>Evento</th><th>Dispara quando</th></tr></thead>
+        <tbody>
+          <tr><td><code>click</code></td><td>o elemento é clicado</td></tr>
+          <tr><td><code>submit</code></td><td>um formulário é enviado</td></tr>
+          <tr><td><code>input</code></td><td>o valor de um campo muda, a cada tecla</td></tr>
+          <tr><td><code>keydown</code> / <code>keyup</code></td><td>uma tecla é pressionada / solta</td></tr>
+          <tr><td><code>DOMContentLoaded</code></td><td>o HTML terminou de carregar (em <code>document</code>)</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="m4">
+      <h2>4. Métodos de array</h2>
+      <pre><code>const numeros = [1, 2, 3, 4, 5];
+
+const dobrados = numeros.map(n =&gt; n * 2);          // [2, 4, 6, 8, 10]
+const pares = numeros.filter(n =&gt; n % 2 === 0);     // [2, 4]
+const soma = numeros.reduce((total, n) =&gt; total + n, 0); // 15
+const encontrado = numeros.find(n =&gt; n &gt; 3);          // 4
+const existe = numeros.some(n =&gt; n &gt; 4);               // true
+const todosPositivos = numeros.every(n =&gt; n &gt; 0);        // true
+
+numeros.forEach(n =&gt; console.log(n));
+
+const ordenado = [3, 1, 2].sort();                       // [1, 2, 3]</code></pre>
+      <table>
+        <thead><tr><th>Método</th><th>Faz</th><th>Retorna</th></tr></thead>
+        <tbody>
+          <tr><td><code>map</code></td><td>transforma cada item</td><td>array novo, mesmo tamanho</td></tr>
+          <tr><td><code>filter</code></td><td>mantém só os aprovados</td><td>array novo, menor ou igual</td></tr>
+          <tr><td><code>reduce</code></td><td>acumula tudo num valor</td><td>um valor só</td></tr>
+          <tr><td><code>find</code></td><td>para no primeiro aprovado</td><td>o item, ou <code>undefined</code></td></tr>
+          <tr><td><code>some</code> / <code>every</code></td><td>testa a lista inteira</td><td><code>true</code>/<code>false</code></td></tr>
+        </tbody>
+      </table>
+      <div class="callout">
+        <span class="label">Hábito a desenvolver</span>
+        <p>Toda vez que a solução for "percorrer um array e fazer algo com cada item", pergunte primeiro: isso é um <code>map</code>, um <code>filter</code> ou um <code>reduce</code>? Esses três cobrem a maioria dos casos antes de precisar de um loop manual.</p>
+      </div>
+    </section>
+
+    <section id="m5">
+      <h2>5. Objetos e desestruturação</h2>
+      <pre><code>const pessoa = {
+  nome: "Ana",
+  idade: 25,
+  endereco: { cidade: "São Paulo", uf: "SP" },
+  falar() {
+    console.log(`${this.nome} está falando`);
+  }
+};
+
+pessoa.nome;              // "Ana"
+pessoa["nome"];            // "Ana" — mesma coisa, útil quando a chave é dinâmica
+pessoa.falar();
+
+// desestruturação — extrai propriedades direto em variáveis
+const { nome, idade } = pessoa;
+const { cidade } = pessoa.endereco;
+
+// spread — copia propriedades para um objeto novo
+const pessoaAtualizada = { ...pessoa, idade: 26 };</code></pre>
+      <p class="note">O spread (<code>...pessoa</code>) cria um objeto <strong>novo</strong>, copiando as propriedades — é assim que se atualiza um valor sem alterar o objeto original, um padrão comum ao trabalhar com estado em interfaces.</p>
+    </section>
+
+    <section id="m6">
+      <h2>6. Formulários com JS</h2>
+      <pre><code>const form = document.querySelector("#cadastro");
+
+form.addEventListener("submit", (evento) =&gt; {
+  evento.preventDefault();   // impede o recarregamento padrão da página
+
+  const nome = document.querySelector("#nome").value;
+  const email = document.querySelector("#email").value;
+
+  if (nome.trim() === "") {
+    alert("Preencha o nome.");
+    return;
+  }
+
+  console.log("Enviando:", { nome, email });
+});</code></pre>
+      <p class="note"><code>evento.preventDefault()</code> é essencial aqui — sem ele, o formulário tentaria recarregar a página (comportamento padrão do HTML), e o JavaScript nunca teria a chance de processar os dados antes disso acontecer.</p>
+    </section>
+
+    <section id="m7">
+      <h2>7. JSON e localStorage</h2>
+      <pre><code>const pessoa = { nome: "Ana", idade: 25 };
+
+const texto = JSON.stringify(pessoa);   // objeto → texto: '{"nome":"Ana","idade":25}'
+const devolta = JSON.parse(texto);       // texto → objeto de novo
+
+// localStorage guarda dados no navegador, entre sessões
+localStorage.setItem("usuario", JSON.stringify(pessoa));
+
+const salvo = JSON.parse(localStorage.getItem("usuario"));
+console.log(salvo.nome);   // "Ana"
+
+localStorage.removeItem("usuario");</code></pre>
+      <p><code>localStorage</code> só guarda texto — por isso todo objeto precisa passar por <code>JSON.stringify</code> antes de salvar, e por <code>JSON.parse</code> ao recuperar. Os dados ficam salvos mesmo depois de fechar o navegador, até serem removidos explicitamente.</p>
+    </section>
+
+    <section id="projeto">
+      <h2>Projeto do nível: lista de tarefas com localStorage</h2>
+      <ul class="checklist">
+        <li>Um <code>input</code> de texto e um botão "Adicionar"</li>
+        <li>Ao adicionar, a tarefa aparece numa lista (<code>ul</code>) na tela, usando <code>createElement</code> ou <code>innerHTML</code></li>
+        <li>Cada tarefa tem um botão "Concluir" que risca o texto (<code>classList.toggle</code> com uma classe <code>.concluida { text-decoration: line-through; }</code>)</li>
+        <li>Cada tarefa tem um botão "Remover"</li>
+        <li>A lista inteira é salva no <code>localStorage</code> a cada mudança, e recarregada automaticamente quando a página abre de novo</li>
+      </ul>
+    </section>
+
+    <div class="pagefoot">
+      <a href="basico.html">← Básico</a>
+      <a href="avancado.html">Próximo: Avançado →</a>
+    </div>
+  </main>
+</div>
+
+<footer class="site-footer">
+  JavaScript na Prática — material de estudo publicado com GitHub Pages.
+</footer>
+
+</body>
+</html>

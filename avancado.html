@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>JavaScript Avançado — JavaScript na Prática</title>
+<meta name="description" content="JavaScript avançado: Promises, async/await, Fetch API, closures, this, classes ES6, módulos e tratamento de erros.">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="bar">
+    <a class="brand" href="index.html"><span class="mark">J</span>JavaScript na Prática</a>
+    <nav class="site-nav">
+      <a href="index.html">Início</a>
+      <a href="basico.html">Básico</a>
+      <a href="intermediario.html">Intermediário</a>
+      <a href="avancado.html" aria-current="page">Avançado</a>
+    </nav>
+  </div>
+</header>
+<div class="level-nav">
+  <div class="bar">
+    <a class="level-pill" href="basico.html">1 · Básico</a>
+    <a class="level-pill" href="intermediario.html">2 · Intermediário</a>
+    <a class="level-pill" aria-current="page" href="avancado.html">3 · Avançado</a>
+  </div>
+</div>
+
+<div class="docs">
+  <aside class="docs-side">
+    <p class="side-title">Módulos</p>
+    <ul>
+      <li><a href="#m1">1. Assincronismo e Promises</a></li>
+      <li><a href="#m2">2. async/await</a></li>
+      <li><a href="#m3">3. Fetch API</a></li>
+      <li><a href="#m4">4. Closures e escopo</a></li>
+      <li><a href="#m5">5. this, bind, call, apply</a></li>
+      <li><a href="#m6">6. Classes ES6</a></li>
+      <li><a href="#m7">7. Módulos ES6</a></li>
+      <li><a href="#m8">8. Tratamento de erros</a></li>
+      <li><a href="#projeto">Projeto do nível</a></li>
+    </ul>
+  </aside>
+
+  <main class="docs-main">
+    <p class="page-kicker">nível 3 de 3</p>
+    <h1>JavaScript Avançado</h1>
+    <p class="lede">Pré-requisito: <a href="intermediario.html">JavaScript Intermediário</a>. Aqui entra código que conversa com servidores e se organiza em projetos maiores.</p>
+
+    <section id="m1">
+      <h2>1. Assincronismo e Promises</h2>
+      <p>JavaScript roda numa única linha de execução — mas tarefas demoradas (esperar uma resposta de rede, um timer) não podem travar essa linha. Elas são delegadas ao navegador e retornam depois, via <strong>Promise</strong>.</p>
+      <pre><code>function esperar(segundos) {
+  return new Promise((resolve, reject) => {
+    if (segundos < 0) {
+      reject(new Error("Tempo inválido"));
+      return;
+    }
+    setTimeout(() => resolve("Pronto!"), segundos * 1000);
+  });
+}
+
+esperar(2)
+  .then(resultado => console.log(resultado))
+  .catch(erro => console.error(erro));</code></pre>
+      <table>
+        <thead><tr><th>Estado da Promise</th><th>Significa</th></tr></thead>
+        <tbody>
+          <tr><td><em>pending</em></td><td>ainda não terminou</td></tr>
+          <tr><td><em>fulfilled</em></td><td>terminou com sucesso — dispara <code>.then()</code></td></tr>
+          <tr><td><em>rejected</em></td><td>terminou com erro — dispara <code>.catch()</code></td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="m2">
+      <h2>2. async/await</h2>
+      <pre><code>async function exemplo() {
+  console.log("Começando...");
+  const resultado = await esperar(2);
+  console.log(resultado);
+}
+
+exemplo();</code></pre>
+      <p><code>async</code>/<code>await</code> é "açúcar sintático" sobre Promises — o mesmo mecanismo por baixo, mas com cara de código síncrono, muito mais fácil de ler do que encadear vários <code>.then()</code>. Toda função <code>async</code> retorna, ela mesma, uma Promise.</p>
+      <div class="callout">
+        <span class="label">Regra prática</span>
+        <p><code>await</code> só funciona dentro de uma função marcada <code>async</code> (ou, em módulos modernos, no nível mais externo do arquivo). Esquecer o <code>async</code> na declaração da função é o erro de sintaxe mais comum desse tópico.</p>
+      </div>
+    </section>
+
+    <section id="m3">
+      <h2>3. Fetch API</h2>
+      <pre><code>async function buscarUsuarios() {
+  try {
+    const resposta = await fetch("https://api.exemplo.com/usuarios");
+
+    if (!resposta.ok) {
+      throw new Error(`Erro HTTP: ${resposta.status}`);
+    }
+
+    const usuarios = await resposta.json();
+    console.log(usuarios);
+  } catch (erro) {
+    console.error("Falha ao buscar usuários:", erro.message);
+  }
+}
+
+// enviando dados (POST)
+async function criarUsuario(dados) {
+  const resposta = await fetch("https://api.exemplo.com/usuarios", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(dados)
+  });
+  return resposta.json();
+}</code></pre>
+      <p class="note"><code>fetch</code> não lança erro em respostas <code>4xx</code>/<code>5xx</code> — só em falha de rede. Por isso é preciso checar <code>resposta.ok</code> manualmente antes de seguir, como no exemplo.</p>
+    </section>
+
+    <section id="m4">
+      <h2>4. Closures e escopo</h2>
+      <pre><code>function criarContador() {
+  let contagem = 0;
+
+  return function () {
+    contagem++;
+    return contagem;
+  };
+}
+
+const contador = criarContador();
+console.log(contador()); // 1
+console.log(contador()); // 2
+
+const outroContador = criarContador();
+console.log(outroContador()); // 1 — independente do primeiro</code></pre>
+      <p>A função retornada "lembra" da variável <code>contagem</code> mesmo depois que <code>criarContador</code> terminou de rodar — isso é uma <strong>closure</strong>. Cada chamada de <code>criarContador()</code> cria um escopo novo e independente, por isso <code>outroContador</code> começa do zero.</p>
+    </section>
+
+    <section id="m5">
+      <h2>5. this, bind, call, apply</h2>
+      <pre><code>const pessoa = {
+  nome: "Ana",
+  falar() {
+    console.log(this.nome);   // "this" é quem chamou o método: pessoa
+  }
+};
+
+pessoa.falar();   // "Ana"
+
+const falarSolto = pessoa.falar;
+falarSolto();       // undefined — perdeu o contexto de "pessoa"
+
+const falarPreso = pessoa.falar.bind(pessoa);
+falarPreso();        // "Ana" — bind "trava" o this para sempre
+
+// arrow functions NÃO têm o próprio this — herdam do escopo onde foram criadas
+const pessoa2 = {
+  nome: "Rui",
+  falar: () => console.log(this.nome)   // this aqui NÃO é pessoa2
+};</code></pre>
+      <p class="note">Essa é uma das maiores fontes de bug para quem está aprendendo: <code>this</code> depende de <strong>como a função foi chamada</strong>, não de onde foi definida — exceto em arrow functions, que fixam o <code>this</code> do contexto ao redor desde a criação.</p>
+    </section>
+
+    <section id="m6">
+      <h2>6. Classes ES6</h2>
+      <pre><code>class Animal {
+  constructor(nome) {
+    this.nome = nome;
+  }
+
+  falar() {
+    return `${this.nome} faz um som`;
+  }
+}
+
+class Cachorro extends Animal {
+  falar() {
+    return `${this.nome} late: Au au!`;
+  }
+}
+
+const rex = new Cachorro("Rex");
+console.log(rex.falar());   // "Rex late: Au au!"</code></pre>
+      <div class="callout good">
+        <span class="label">Reconheceu isso?</span>
+        <p><code>class</code>, <code>constructor</code>, herança com <code>extends</code>, sobrescrita de método — são exatamente os mesmos conceitos de POO vistos em C#, só com sintaxe de JavaScript. Encapsulamento, herança, polimorfismo: os mesmos quatro pilares, outra linguagem.</p>
+      </div>
+      <pre><code>class ContaBancaria {
+  #saldo = 0;   // campo privado — o # torna inacessível de fora da classe
+
+  depositar(valor) {
+    this.#saldo += valor;
+  }
+
+  get saldo() {
+    return this.#saldo;
+  }
+}
+
+const conta = new ContaBancaria();
+conta.depositar(100);
+console.log(conta.saldo);    // 100
+console.log(conta.#saldo);    // SyntaxError — campo privado</code></pre>
+    </section>
+
+    <section id="m7">
+      <h2>7. Módulos ES6</h2>
+      <pre><code>// arquivo: animal.js
+export class Animal {
+  constructor(nome) { this.nome = nome; }
+}
+
+export const TIPOS = ["cachorro", "gato", "pássaro"];
+
+export default function criarAnimalPadrao() {
+  return new Animal("Sem nome");
+}</code></pre>
+      <pre><code>// arquivo: main.js
+import criarAnimalPadrao, { Animal, TIPOS } from "./animal.js";
+
+const a = new Animal("Rex");
+console.log(TIPOS);</code></pre>
+      <pre><code>&lt;!-- no HTML, módulos precisam do type="module" --&gt;
+&lt;script type="module" src="main.js"&gt;&lt;/script&gt;</code></pre>
+      <p><code>export default</code> é usado para o "valor principal" do arquivo (só pode haver um por arquivo); <code>export</code> nomeado permite vários por arquivo, importados entre chaves. Módulos dividem o código em arquivos menores e reutilizáveis, em vez de um único script gigante.</p>
+    </section>
+
+    <section id="m8">
+      <h2>8. Tratamento de erros</h2>
+      <pre><code>function dividir(a, b) {
+  if (b === 0) {
+    throw new Error("Não é possível dividir por zero");
+  }
+  return a / b;
+}
+
+try {
+  console.log(dividir(10, 0));
+} catch (erro) {
+  console.error("Algo deu errado:", erro.message);
+} finally {
+  console.log("Isso roda sempre, com ou sem erro");
+}
+
+// erro customizado
+class ErroDeValidacao extends Error {
+  constructor(mensagem) {
+    super(mensagem);
+    this.name = "ErroDeValidacao";
+  }
+}
+
+try {
+  throw new ErroDeValidacao("E-mail inválido");
+} catch (erro) {
+  if (erro instanceof ErroDeValidacao) {
+    console.log("Erro de validação:", erro.message);
+  }
+}</code></pre>
+      <p class="note">Criar classes de erro customizadas (estendendo <code>Error</code>) permite diferenciar, no <code>catch</code>, que <em>tipo</em> de problema aconteceu — útil quando o mesmo bloco precisa reagir diferente a um erro de rede versus um erro de validação, por exemplo.</p>
+    </section>
+
+    <section id="projeto">
+      <h2>Projeto do nível: buscador de usuários do GitHub</h2>
+      <ul class="checklist">
+        <li>Um campo de texto onde o usuário digita um nome de usuário do GitHub</li>
+        <li>Ao enviar, uma função <code>async</code> busca <code>https://api.github.com/users/NOME</code> com <code>fetch</code></li>
+        <li>Mostra na tela o avatar, nome e bio retornados, usando manipulação do DOM</li>
+        <li>Trata o caso de usuário não encontrado (status 404) mostrando uma mensagem amigável, sem quebrar a página</li>
+        <li>Usa uma <code>class Usuario</code> para organizar os dados antes de exibir, com um método <code>exibir()</code></li>
+      </ul>
+      <div class="callout">
+        <span class="label">Para onde ir depois</span>
+        <p>Com as três linguagens fundamentais dominadas (HTML, CSS, JavaScript), o próximo passo natural é <strong>Bootstrap</strong> — um framework que acelera a parte de CSS usando componentes prontos, e cujos componentes interativos (modal, carousel) são, por baixo dos panos, exatamente o JavaScript orientado a eventos visto aqui.</p>
+      </div>
+    </section>
+
+    <div class="pagefoot">
+      <a href="intermediario.html">← Intermediário</a>
+      <a href="index.html">Voltar ao início →</a>
+    </div>
+  </main>
+</div>
+
+<footer class="site-footer">
+  JavaScript na Prática — material de estudo publicado com GitHub Pages.
+</footer>
+
+</body>
+</html>

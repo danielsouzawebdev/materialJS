@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>JavaScript na Prática</title>
+<meta name="description" content="JavaScript do zero ao avançado: variáveis, DOM, eventos, arrays, assincronismo, classes e módulos ES6.">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="bar">
+    <a class="brand" href="index.html"><span class="mark">J</span>JavaScript na Prática</a>
+    <nav class="site-nav">
+      <a href="index.html" aria-current="page">Início</a>
+      <a href="basico.html">Básico</a>
+      <a href="intermediario.html">Intermediário</a>
+      <a href="avancado.html">Avançado</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <p class="eyebrow">material de estudo · JavaScript</p>
+    <h1>JavaScript: a camada que reage.</h1>
+    <p class="lede">Um material só sobre JavaScript, em três níveis. HTML dá a estrutura, CSS dá a aparência — é o JavaScript que faz a página responder a cliques, mudar sozinha, conversar com um servidor.</p>
+    <div class="cta-row">
+      <a class="btn btn-primary" href="basico.html">Começar pelo Básico</a>
+      <a class="btn btn-ghost" href="#roteiro">Ver o roteiro completo</a>
+    </div>
+  </section>
+
+  <section class="concept">
+    <div class="inner">
+      <h2>Onde o JavaScript roda</h2>
+      <p>Diferente de HTML e CSS, JavaScript é uma linguagem de programação de verdade — com variáveis, funções, decisões. O lugar mais comum onde ele roda é dentro do próprio navegador, mas a mesma linguagem também roda em servidores (Node.js), aplicativos e mais.</p>
+      <p>Toda a prática deste material acontece no <strong>console do navegador</strong> — um lugar para rodar JavaScript e ver o resultado na hora, sem precisar configurar nada.</p>
+    </div>
+
+    <div class="console-mock">
+      <div class="chrome"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="label">Console — DevTools</span></div>
+      <div class="body">
+        <div class="line"><span class="prompt">&gt;</span> let nome = "Ana";</div>
+        <div class="line"><span class="prompt">&gt;</span> console.log("Olá, " + nome);</div>
+        <div class="line result">Olá, Ana</div>
+        <div class="line comment">// pressione F12 e cole esse código na aba Console</div>
+      </div>
+    </div>
+
+    <div class="inner">
+      <h2>Como usar este material</h2>
+      <ul>
+        <li><strong>Para testar trechos curtos:</strong> abra qualquer página, pressione <code>F12</code>, vá na aba <strong>Console</strong> e cole o código.</li>
+        <li><strong>Para os projetos maiores:</strong> um arquivo <code>script.js</code> separado, ligado ao HTML com <code>&lt;script src="script.js" defer&gt;&lt;/script&gt;</code> antes de fechar o <code>&lt;head&gt;</code>, ou diretamente antes de <code>&lt;/body&gt;</code>.</li>
+        <li>Use a <a href="../html-site/basico.html">página de portfólio do material de HTML</a> e os estilos do material de CSS como base para aplicar o comportamento deste material.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="roadmap" id="roteiro">
+    <h2>O roteiro completo</h2>
+    <p class="lede">Três páginas, cada uma com vários módulos e um projeto prático ao final.</p>
+
+    <div class="level-grid">
+      <a class="level-card" href="basico.html">
+        <span class="num">1</span>
+        <h3>Básico</h3>
+        <p>A gramática da linguagem — sem isso, nada do resto funciona.</p>
+        <ul>
+          <li>Onde o JS roda</li>
+          <li>Variáveis e tipos</li>
+          <li>Operadores</li>
+          <li>Strings</li>
+          <li>Condicionais</li>
+          <li>Loops</li>
+          <li>Funções</li>
+          <li>Arrays básico</li>
+        </ul>
+      </a>
+
+      <a class="level-card" href="intermediario.html">
+        <span class="num">2</span>
+        <h3>Intermediário</h3>
+        <p>Fazer a página reagir de verdade a quem está usando.</p>
+        <ul>
+          <li>Selecionar elementos do DOM</li>
+          <li>Manipular o DOM</li>
+          <li>Eventos</li>
+          <li>Métodos de array</li>
+          <li>Objetos e desestruturação</li>
+          <li>Formulários com JS</li>
+          <li>JSON e localStorage</li>
+        </ul>
+      </a>
+
+      <a class="level-card" href="avancado.html">
+        <span class="num">3</span>
+        <h3>Avançado</h3>
+        <p>Dados de verdade, vindos de fora, e código organizado para crescer.</p>
+        <ul>
+          <li>Assincronismo e Promises</li>
+          <li>async/await</li>
+          <li>Fetch API</li>
+          <li>Closures e escopo</li>
+          <li>this, bind, call, apply</li>
+          <li>Classes ES6</li>
+          <li>Módulos ES6</li>
+          <li>Tratamento de erros</li>
+        </ul>
+      </a>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  JavaScript na Prática — material de estudo publicado com GitHub Pages.
+</footer>
+
+</body>
+</html>

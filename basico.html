@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>JavaScript Básico — JavaScript na Prática</title>
+<meta name="description" content="JavaScript básico: variáveis, tipos, operadores, strings, condicionais, loops, funções e arrays.">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="bar">
+    <a class="brand" href="index.html"><span class="mark">J</span>JavaScript na Prática</a>
+    <nav class="site-nav">
+      <a href="index.html">Início</a>
+      <a href="basico.html" aria-current="page">Básico</a>
+      <a href="intermediario.html">Intermediário</a>
+      <a href="avancado.html">Avançado</a>
+    </nav>
+  </div>
+</header>
+<div class="level-nav">
+  <div class="bar">
+    <a class="level-pill" aria-current="page" href="basico.html">1 · Básico</a>
+    <a class="level-pill" href="intermediario.html">2 · Intermediário</a>
+    <a class="level-pill" href="avancado.html">3 · Avançado</a>
+  </div>
+</div>
+
+<div class="docs">
+  <aside class="docs-side">
+    <p class="side-title">Módulos</p>
+    <ul>
+      <li><a href="#m1">1. Onde o JS roda</a></li>
+      <li><a href="#m2">2. Variáveis e tipos</a></li>
+      <li><a href="#m3">3. Operadores</a></li>
+      <li><a href="#m4">4. Strings</a></li>
+      <li><a href="#m5">5. Condicionais</a></li>
+      <li><a href="#m6">6. Loops</a></li>
+      <li><a href="#m7">7. Funções</a></li>
+      <li><a href="#m8">8. Arrays básico</a></li>
+      <li><a href="#projeto">Projeto do nível</a></li>
+    </ul>
+  </aside>
+
+  <main class="docs-main">
+    <p class="page-kicker">nível 1 de 3</p>
+    <h1>JavaScript Básico</h1>
+    <p class="lede">Oito módulos curtos — a gramática da linguagem. Teste cada exemplo no console do navegador (<code>F12</code>) antes de seguir para o próximo.</p>
+
+    <section id="m1">
+      <h2>1. Onde o JS roda</h2>
+      <pre><code>&lt;!-- no fim do body, depois de todo o HTML que o script usa --&gt;
+&lt;script src="script.js" defer&gt;&lt;/script&gt;
+&lt;/body&gt;</code></pre>
+      <pre><code>// script.js
+console.log("O script carregou!");</code></pre>
+      <p><code>console.log()</code> é a ferramenta mais usada em todo este material — imprime um valor no console do navegador, sem aparecer nada na tela da página. É assim que se inspeciona o que o código está fazendo, passo a passo.</p>
+      <div class="callout">
+        <span class="label">Pratique agora</span>
+        <p>Abra qualquer página (inclusive esta), pressione <code>F12</code>, clique na aba <strong>Console</strong>, digite <code>console.log("oi")</code> e pressione Enter.</p>
+      </div>
+    </section>
+
+    <section id="m2">
+      <h2>2. Variáveis e tipos</h2>
+      <pre><code>let nome = "Ana";          // pode mudar depois
+const PI = 3.14;            // não pode ser reatribuída
+let idade = 25;              // number
+let ativo = true;            // boolean
+let nada = null;             // ausência intencional de valor
+let indefinido;               // undefined — ainda não recebeu valor
+
+console.log(typeof nome, typeof idade, typeof ativo);
+// string number boolean</code></pre>
+      <table>
+        <thead><tr><th>Palavra-chave</th><th>Comportamento</th></tr></thead>
+        <tbody>
+          <tr><td><code>const</code></td><td>não pode ser reatribuída — use por padrão</td></tr>
+          <tr><td><code>let</code></td><td>pode mudar — use só quando o valor realmente for mudar</td></tr>
+          <tr><td><code>var</code></td><td>forma antiga, com regras de escopo confusas — evite</td></tr>
+        </tbody>
+      </table>
+      <div class="callout warn">
+        <span class="label">null vs undefined</span>
+        <p><code>undefined</code> é o que o JavaScript dá sozinho a algo que ainda não tem valor. <code>null</code> é um valor que <strong>você</strong> atribui de propósito para dizer "vazio por design". A diferença costuma confundir — na dúvida, prefira <code>null</code> quando for você quem está esvaziando algo intencionalmente.</p>
+      </div>
+    </section>
+
+    <section id="m3">
+      <h2>3. Operadores</h2>
+      <pre><code>// aritméticos
+10 + 3;   // 13
+10 - 3;   // 7
+10 * 3;   // 30
+10 / 3;   // 3.333...
+10 % 3;   // 1 (resto da divisão)
+
+// comparação
+5 == "5";    // true  — compara só o VALOR, converte tipo
+5 === "5";   // false — compara valor E tipo
+5 !== "5";   // true
+
+// lógicos
+true && false;   // AND — false
+true || false;   // OR  — true
+!true;            // NOT — false</code></pre>
+      <div class="callout">
+        <span class="label">Regra para a vida toda</span>
+        <p>Use sempre <code>===</code> e <code>!==</code>, nunca <code>==</code> ou <code>!=</code>. A versão com três sinais de igual não faz conversão de tipo escondida, o que evita bugs difíceis de rastrear como <code>0 == ""</code> retornando <code>true</code>.</p>
+      </div>
+    </section>
+
+    <section id="m4">
+      <h2>4. Strings</h2>
+      <pre><code>const nome = "Ana";
+const sobrenome = 'Silva';
+
+// template literals — crase, não aspas
+const completo = `${nome} ${sobrenome}`;
+console.log(`Olá, ${completo}! Você tem ${25 + 1} anos.`);
+
+// métodos comuns
+"  texto com espaço  ".trim();        // "texto com espaço"
+"Ana".toUpperCase();                   // "ANA"
+"ANA".toLowerCase();                   // "ana"
+"javascript".includes("script");       // true
+"a,b,c".split(",");                    // ["a", "b", "c"]
+"Ana".length;                          // 3</code></pre>
+      <p class="note">Template literals (com crase <code>`</code>) permitem inserir variáveis direto no texto com <code>${}</code>, sem precisar concatenar com <code>+</code> — mais fácil de ler, principalmente em strings longas.</p>
+    </section>
+
+    <section id="m5">
+      <h2>5. Condicionais</h2>
+      <pre><code>let idade = 17;
+
+if (idade >= 18) {
+  console.log("Maior de idade");
+} else if (idade >= 13) {
+  console.log("Adolescente");
+} else {
+  console.log("Criança");
+}
+
+// switch — bom quando há muitas comparações do MESMO valor
+switch (diaDaSemana) {
+  case "segunda":
+    console.log("Começo de semana");
+    break;
+  case "sexta":
+    console.log("Quase lá");
+    break;
+  default:
+    console.log("Dia comum");
+}
+
+// ternário — um if/else curto, numa expressão só
+const status = idade >= 18 ? "liberado" : "bloqueado";</code></pre>
+    </section>
+
+    <section id="m6">
+      <h2>6. Loops</h2>
+      <pre><code>for (let i = 0; i &lt; 5; i++) {
+  console.log("Volta número", i);
+}
+
+let contador = 0;
+while (contador &lt; 3) {
+  console.log(contador);
+  contador++;
+}
+
+const frutas = ["maçã", "banana", "uva"];
+for (const fruta of frutas) {
+  console.log(fruta);
+}</code></pre>
+      <table>
+        <thead><tr><th>Loop</th><th>Quando usar</th></tr></thead>
+        <tbody>
+          <tr><td><code>for</code></td><td>quando se sabe o número de voltas, ou precisa do índice</td></tr>
+          <tr><td><code>while</code></td><td>quando a condição de parada depende de algo que muda durante o loop</td></tr>
+          <tr><td><code>for...of</code></td><td>para percorrer os itens de um array diretamente, sem lidar com índice</td></tr>
+        </tbody>
+      </table>
+      <div class="callout">
+        <span class="label">Exercício</span>
+        <p>Escreva um <code>for</code> que imprime os números de 1 a 20, mas substitui múltiplos de 3 por "Fizz", múltiplos de 5 por "Buzz", e múltiplos de ambos por "FizzBuzz" — um clássico para treinar condicional dentro de loop.</p>
+      </div>
+    </section>
+
+    <section id="m7">
+      <h2>7. Funções</h2>
+      <pre><code>function saudacao(nome) {
+  return "Olá, " + nome + "!";
+}
+
+// arrow function — forma mais curta, comum em código moderno
+const saudacao2 = (nome) => "Olá, " + nome + "!";
+
+// parâmetro com valor padrão
+function multiplicar(a, b = 2) {
+  return a * b;
+}
+
+console.log(saudacao("Ana"));
+console.log(multiplicar(5));      // 10 (usa o padrão b=2)
+console.log(multiplicar(5, 3));   // 15</code></pre>
+      <p class="note">Uma função que não tem <code>return</code> explícito devolve <code>undefined</code> automaticamente. Isso costuma ser a causa de bugs do tipo "por que minha variável virou undefined" — confira sempre se a função realmente retorna algo.</p>
+    </section>
+
+    <section id="m8">
+      <h2>8. Arrays básico</h2>
+      <pre><code>const numeros = [10, 20, 30];
+
+numeros[0];          // 10 — índice começa em zero
+numeros.length;       // 3
+
+numeros.push(40);     // adiciona no final → [10, 20, 30, 40]
+numeros.pop();         // remove o último → [10, 20, 30]
+numeros.unshift(5);    // adiciona no início → [5, 10, 20, 30]
+numeros.shift();        // remove o primeiro → [10, 20, 30]
+
+numeros.indexOf(20);    // 1
+numeros.includes(99);   // false</code></pre>
+      <div class="callout">
+        <span class="label">Exercício</span>
+        <p>Crie um array com os nomes de 5 colegas. Use um <code>for...of</code> para imprimir cada nome precedido de "Olá, ", e depois use <code>.push()</code> para adicionar mais um nome ao final.</p>
+      </div>
+    </section>
+
+    <section id="projeto">
+      <h2>Projeto do nível: calculadora de idade</h2>
+      <p>Escreva uma função <code>calcularFaixaEtaria(anoNascimento)</code> que:</p>
+      <ul class="checklist">
+        <li>Calcula a idade com base no ano atual (use <code>new Date().getFullYear()</code>)</li>
+        <li>Retorna <code>"criança"</code> para menores de 13, <code>"adolescente"</code> até 17, <code>"adulto"</code> no resto</li>
+        <li>Usa <code>console.log</code> para mostrar uma frase completa, como <code>"Com 25 anos, você é considerado adulto."</code></li>
+        <li>Lida com um ano de nascimento inválido (maior que o ano atual) imprimindo uma mensagem de erro amigável, em vez de um resultado sem sentido</li>
+      </ul>
+    </section>
+
+    <div class="pagefoot">
+      <a href="index.html">← Início</a>
+      <a href="intermediario.html">Próximo: Intermediário →</a>
+    </div>
+  </main>
+</div>
+
+<footer class="site-footer">
+  JavaScript na Prática — material de estudo publicado com GitHub Pages.
+</footer>
+
+</body>
+</html>
